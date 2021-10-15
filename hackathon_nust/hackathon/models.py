@@ -27,7 +27,8 @@ class courses(models.Model):
 class research_load(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
     project = models.CharField(max_length=50)
-    student = models.CharField(max_length=50) 
+    student = models.CharField(max_length=50)
+    proof_reasearch = models.FileField(upload_to='proof of research/')
 
 class admin_load(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
@@ -38,4 +39,5 @@ class community_load(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
 
     activity = models.CharField(max_length=50)
+    proof_community = models.FileField(upload_to='proof of community outreach/')
 
