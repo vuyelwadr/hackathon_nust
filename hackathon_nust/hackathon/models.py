@@ -14,10 +14,28 @@ class courses(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
     
     # define the types of sessions with first element in each tuple as the actual value to be set on the model, and the second element is the human-readable name
-    session_types = [('t','theory'), ('p','theory')]
+    session_types = [('t','theory'), ('p','practical')]
 
     name = models.CharField(max_length=50)
     coordinating = models.BooleanField(default=False)
     first_time = models.BooleanField(default=True)
+    #We should inlude the nuance for first time teaching specifically at the institution,
+    #  keeping in mind ofcourse that first_time=true automatically means true here
     sessions = models.CharField(max_length=1, choices=session_types)
     groups = models.IntegerField(default=0)
+
+class research_load(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
+    project = models.CharField(max_length=50)
+    student = models.CharField(max_length=50) 
+
+class admin_load(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
+
+    duties = models.CharField(max_length=50)
+
+class community_load(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
+
+    activity = models.CharField(max_length=50)
+
