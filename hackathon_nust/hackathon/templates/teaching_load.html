@@ -1,40 +1,60 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8">
-    <title>NUST Form</title>
-    <link rel="stylesheet" href="forms.css">
-</head>
-<div class="header">
-    <pan class="details">NAM University Of Namibia</pan>
-</div>
-
-<body>
-    <div class="container">
-        <img src="nust.png" width="250" height="60">
-        {% for message in messages %}
-            <h5 style="color: red;">{{ message }}</h5>
-        {% endfor %}
-        <div class="title">Lecturer Form</div>
-        <form method="POST">
-            {% csrf_token %}
-            <div class="user-details">
-                <div class="input-box">
-                    <pan class="details">Student name</pan>
-                    <input type="text" name="student_name" placeholder="Student Name" required>
-                </div>
-                <div class="input-box">
-                    <pan class="details">Research Type</pan>
-                    <input type="text" name="research_type" placeholder="Research Type" required>
-                </div>
-                <div class="button">
-                    <input type="submit" name="research_supervision">
-                </div>
-            </div>
-        </form>
+{% block content1 %}
+<h5 class="card-title bg-primary"> Research Supervision </h5>
+<form name="supervision" action="" method="post" >
+    {% csrf_token %}
+<div class="row">
+    <div class="col-md-6 mb-3">
+    <label for="text">Student Name</label>
+    <input type="text" name="student_name" class="form-control" placeholder=" Student name" required>
+ </div>
+ <div class="col-md-6 mb-3">
+    <label for="text">Research Type </label>
+    <select class="form-control" name="research_type">
+       <option value="honours">honours</option>
+       <option value="postgraduate">postgraduate</option>
+       </select>
     </div>
+    <div class="button">
+        <input type="submit" name="research_supervision">
+    </div>
+</div>
+</form> 
+{% endblock %}
 
-</body>
 
-</html>
+{% block content2 %}
+<h5 class="card-title bg-primary"> Course Form </h5>
+
+<form name="supervision" action="" method="post" >
+<div class="row">
+    <div class="col-md-6 mb-3">
+    <label for="text">Course Name</label>
+    <input type="text" value="course_name" class="form-control" placeholder=" Course name" required>
+ </div>
+ <div class="col-md-6 mb-3">
+    <label for="text"> Coordinating </label>
+    <div class="checkbox">
+        <label><input type="checkbox" value="coordinating">  Coordinating</label>
+      </div>
+</div>
+<div class="col-md-6 mb-3">
+    <label for="text">Experience </label>
+    <select name="experience" class="form-control"   id="experience">
+       <option value="fto">1st time teaching course overall</option>
+       <option value="fti">1st time teaching course at the institution </option>
+       <option value="exp">Experienced</option>
+       </select>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="text">Sessions </label>
+        <select name="sessions" class="form-control"   id="experience">
+           <option value="t">Theory</option>
+           <option value="p">Practicals </option>
+           </select>
+        </div>
+        </div>
+</form>   
+{% endblock %}

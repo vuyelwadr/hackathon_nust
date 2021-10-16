@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from .models import Teaching_load, Research_supervision, Courses, Research_load, Research_project, Admin_load, Community_load, User
 
 honours_research_weighting = 2
+postgraduate_research_weighting = 1
 
 def index(request):
     if request.user.is_authenticated:
@@ -49,21 +50,26 @@ def teaching_load(request):
                 student_name = request.POST['student_name']
                 research_type = request.POST['research_type']
 
-                research_supervision = Research_supervision.objects.create(user_id=userid, student_name=student_name,  research_type=research_type)
+                Research_supervision.objects.create(user_id=userid, student_name=student_name,  research_type=research_type)
                 
-                honoursload = teaching_load.honours_research_supervision + honours_research_weighting
-                updated_teaching_load = honoursload + user.teaching
+                if research_type=="honours":
+                    researchload = teaching_load.honours_research_supervision + honours_research_weighting
+                    updated_teaching_load = researchload + user.teaching
+                    teaching = Teaching_load(id=userid, user_id=userid, honours_research_supervision = researchload)
+                    teaching.save()
 
-                teaching = Teaching_load(id=userid, user_id=userid, honours_research_supervision = honoursload)
+                elif research_type=="postgraduate":
+                    researchload = teaching_load.honours_research_supervision + postgraduate_research_weighting
+                    updated_teaching_load = researchload + user.teaching
+                    teaching = Teaching_load(id=userid, user_id=userid, postgraduate_research_weighting = researchload)
+                    teaching.save()
+                
+                teaching = Teaching_load(id=userid, user_id=userid, honours_research_supervision = researchload)
                 teaching.save()
 
-                User.objects.filter(id=userid).update(teaching=updated_teaching_load)
+                update_load(request)
 
-
-                
-
-
-                messages.info(request, honoursload)
+                messages.info(request, researchload)
                 
         return render(request, 'teaching_load.html')
     else:
@@ -89,10 +95,10 @@ def update_load(request):
     total_load = user.teaching + user.administrative + user.research + user.community
     User.objects.filter(id=userid).update(total_load=total_load)
 
-    if total_load<=5:
-        User.objects.filter(id=userid).update(load="low")
-    elif total_load>5 and total_load<10:
-        User.objects.filter(id=userid).update(load="medium")
-    elif total_load>10:
-        User.objects.filter(id=userid).update(load="high")
+    if total_load>=20:
+        User.objects.filter(id=userid).update(load="h")
+    elif total_load>10 and total_load<20:
+        User.objects.filter(id=userid).update(load="m")
+    else:
+        User.objects.filter(id=userid).update(load="l")
 
