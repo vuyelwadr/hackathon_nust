@@ -10,6 +10,13 @@ class teaching_load(models.Model):
     courses = models.IntegerField(default=0)
     honours_research_supervision = models.IntegerField(default=0)
 
+class research_supervision(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
+    
+    research_types = [('h','honours'), ('p','postgraduate')]
+    student_name = models.CharField(max_length=50)
+    research_type = models.CharField(max_length=1, choices=research_types)
+
 class courses(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
     
@@ -17,7 +24,7 @@ class courses(models.Model):
     session_types = [('t','theory'), ('p','practical')]
     experience_types = [('fto','1st time teaching course overall'), ('fti','1st time teaching course at institution'),('exp','experienced')]
 
-    name = models.CharField(max_length=50)
+    course_name = models.CharField(max_length=50)
     coordinating = models.BooleanField(default=False)
     experience = models.CharField(max_length=3, choices= experience_types)
     sessions = models.CharField(max_length=1, choices=session_types)
@@ -26,7 +33,7 @@ class courses(models.Model):
 class research_load(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
     project = models.CharField(max_length=50)
-    student = models.CharField(max_length=50)
+    postgraduate_research_supervision = models.IntegerField(default=0)
     proof_research = models.FileField(upload_to='proof/research/')
 
 class admin_load(models.Model):
