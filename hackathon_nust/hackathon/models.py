@@ -33,7 +33,7 @@ class Courses(models.Model):
     
     # define the types of sessions with first element in each tuple as the actual value to be set on the model, and the second element is the human-readable name
     session_types = [('t','theory'), ('p','practical')]
-    experience_types = [('fto','1st time teaching course overall'), ('fti','1st time teaching course at institution'),('exp','experienced')]
+    experience_types = [('fto','1st_time_teaching_course_overall'), ('fti','1st_time_teaching_course_at_institution'),('exp','experienced')]
 
     course_name = models.CharField(max_length=50)
     coordinating = models.BooleanField(default=False)
