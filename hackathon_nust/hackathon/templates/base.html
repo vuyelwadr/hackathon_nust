@@ -1,13 +1,143 @@
-<!DOCTYPE html>
-<html lang="en-uk">
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+  
+    <title>Nust Dashboard</title>
 
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Hackathon</title>
-    </head>
+     <!-- Bootstrap core CSS -->
+     <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" >
+  </head>
+  <body>
+    <nav class="navbar navbar-primary sticky-top bg-primary flex-md-nowrap p-0 shadow">
+  <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#"><img src ="{% static 'img/nust.png' %}" alt= "nust logo" width="300px" height ="100px"></a>
+  <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+   <ul class="navbar-nav px-3">
+    <li class="nav-item text-nowrap">
+      <a class="nav-link" href="#">Sign out</a>
+    </li>
+  </ul>
+</nav>
 
-    <body>
-        Play around with this
-    </body>
+<div class="container-fluid">
+  <div class="row">
+    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+      <div class="sidebar-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">
+              <span data-feather="home"></span>
+              Dashboard <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Student-dashboard.html">
+              <span data-feather="user"></span>
+              Profile
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Teaching Load
+            </a>
+          </li>
+		   <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Administrative Load
+            </a>
+          </li>
+		  <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="file-text"></span>
+              Research Load
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">
+              <span data-feather="user-check"></span>
+              Community Load
+            </a>
+          </li>
+         
+        </ul>
+
+      
+    </nav>
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Dashboard</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group mr-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">Student Name</button>
+           </div>
+         
+        </div>
+      </div>
+	   <div class="row">
+<div class="col-md-6" >
+             <div class="card">
+                <div class="card-body">
+        <h5 class="card-title bg-primary"> Allocate Course To Lecturer</h5>
+		<form class="needs-validation" novalidate>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="firstName">Staff ID</label>
+            <input type="text" class="form-control" id="firstName" placeholder="" value="" required>
+            <div class="invalid-feedback">
+              Valid first name is required.
+            </div>
+          </div>
+          <table class="table">
+    <thead>
+      <tr>
+        <th>Course ID</th>
+        <th>Course Name</th>
+        <th>Add</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>CMP 8901</td>
+        <td>Computer Theory</td>
+        <td class="btn btn-outline-primary">Add Course </td>
+      </tr>
+      <tr>
+        <td>CMP 8901</td>
+        <td>Computer Theory</td>
+        <td class="btn btn-outline-primary">Add Course </td>
+      </tr>
+    <tr>
+        <td>CMP 8901</td>
+        <td>Computer Theory</td>
+        <td class="btn btn-outline-primary">Add Course </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+		
+         </div>  
+		   </div> 
+		    </div> 
+ 		 <div class="col-md-4">
+             <div class="card">
+                <div class="card-body">
+        <h5 class="card-title bg-primary"> All Participants </h5>
+		
+         </div>  
+		   </div>
+</div
+    </main>
+  </div>
+</div>
+
 </html>

@@ -1,0 +1,26 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Animated Login Form</title>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<div class="header">
+    <pan class="details">NUST</pan>
+</div>
+
+<body>
+    <form class="box" action="/google/login/?process=login"" method="POST">
+        {% csrf_token %}
+        <img src="{% static 'img/nust.png' %}" width="250" height="60">
+        <h1>Login</h1>
+        <button href="/google/login/?process=login">Google Sign in</button>
+    </form>
+
+
+</body>
+
+</html>
