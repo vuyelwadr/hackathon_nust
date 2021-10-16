@@ -48,6 +48,20 @@ INSTALLED_APPS = [
 
 SITE_ID = 1
 
+# Provider specific settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        # For each OAuth based provider, either add a ``SocialApp``
+        # (``socialaccount`` app) containing the required client
+        # credentials, or list them here:
+        'APP': {
+            'client_id': '192526848204-n5pss9eiicp772ccr84jmqoj6np45s2s.apps.googleusercontent.com',
+            'secret': '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',
+            'key': ''
+        }
+    }
+}
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -142,3 +156,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL='/dashboard'
+
+AUTH_USER_MODEL = 'hackathon.User'

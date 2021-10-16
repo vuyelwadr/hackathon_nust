@@ -1,7 +1,18 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
 # Django models here. (DATABASE TABLES)
+
+class User(AbstractUser):
+    load_types = [('h', 'high'), ('l', 'low'), ('m', 'medium')]
+
+    load = models.CharField(max_length=1, choices=load_types, default='l')
+    teaching = models.IntegerField(default=0)
+    administrative = models.IntegerField(default=0)
+    research = models.IntegerField(default=0)
+    community = models.IntegerField(default=0)
+    total_load = models.IntegerField(default=0)
 
 
 class Teaching_load(models.Model):
@@ -32,9 +43,8 @@ class Courses(models.Model):
 
 class Research_load(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
-    project = models.CharField(max_length=50)
+    research_projects = models.IntegerField(default=0)
     postgraduate_research_supervision = models.IntegerField(default=0)
-    proof_research = models.FileField(upload_to='proof/research/')
 
 class Research_project(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)

@@ -13,19 +13,23 @@
 <body>
     <div class="container">
         <img src="nust.png" width="250" height="60">
+        {% for message in messages %}
+            <h5 style="color: red;">{{ message }}</h5>
+        {% endfor %}
         <div class="title">Lecturer Form</div>
-        <form action="#">
+        <form method="POST">
+            {% csrf_token %}
             <div class="user-details">
                 <div class="input-box">
-                    <pan class="details">Course 2nd</pan>
-                    <input type="text" name="research_type "placeholder="Research Type" required>
-                </div>
-                <div class="input-box">
-                    <pan class="details">Course</pan>
+                    <pan class="details">Student name</pan>
                     <input type="text" name="student_name" placeholder="Student Name" required>
                 </div>
+                <div class="input-box">
+                    <pan class="details">Research Type</pan>
+                    <input type="text" name="research_type" placeholder="Research Type" required>
+                </div>
                 <div class="button">
-                    <input type="submit" value="research_supervision">
+                    <input type="submit" name="research_supervision">
                 </div>
             </div>
         </form>
