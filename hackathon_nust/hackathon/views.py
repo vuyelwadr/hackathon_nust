@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Teaching_load, Research_supervision, Courses, Research_load, Research_project, Admin_load, Community_load, User
 
-
+# workload weighting
 honours_research_weighting = 2
 postgraduate_research_weighting = 1
 course_weighting = 4
@@ -161,10 +161,6 @@ def research_load(request):
     else:
         return render(request, 'login.html')
 
-#maybe just for viewing
-def admin_load(request):
-    return render(request, 'admin_load.html')
-
 def community_load(request):
     if request.user.is_authenticated:
 
@@ -194,16 +190,47 @@ def profile(request):
     if request.user.is_authenticated:
         userid = request.user.id
         update_load(request)
-        user = User.objects.prefetch_related().get(id=userid)
-        teaching_load = Teaching_load.objects.prefetch_related().get(id=userid)
-        research_supervision = Research_supervision.objects.prefetch_related().get(id=userid)
-        courses = Courses.objects.prefetch_related().get(id=userid)
-        research_load = Research_load.objects.prefetch_related().get(id=userid)
-        # research_project = Research_project.objects.prefetch_related().get(id=userid)
-        # admin_load = Admin_load.objects.prefetch_related().get(id=userid)
-        # Community_load = Community_load.objects.prefetch_related().get(id=userid)
+        try:     
+            user = User.objects.prefetch_related().get(id=userid)
+        except:
+            user = 0
+        
+        try:
+            teaching_load = Teaching_load.objects.prefetch_related().get(id=userid)
+        except:
+            research_load = 0
 
-        details = {'user':user, 'teaching_load':teaching_load, 'research_supervision':research_supervision, 'courses':courses, 'research_load':research_load }
+        try:
+            research_supervision = Research_supervision.objects.prefetch_related().get(id=userid)
+        except:
+            research_supervision = 0
+
+        try:
+            courses = Courses.objects.prefetch_related().get(id=userid)
+        except:
+            courses = 0
+
+        try:
+            research_load = Research_load.objects.prefetch_related().get(id=userid)
+        except:
+            research_load = 0
+
+        try:
+            research_project = Research_project.objects.prefetch_related().get(id=userid)
+        except:
+            research_project = 0
+
+        try:
+            admin_load = Admin_load.objects.prefetch_related().get(id=userid)
+        except:
+            admin_load = 0
+
+        try:
+            community_load = Community_load.objects.prefetch_related().get(id=userid)
+        except:
+            community_load = 0
+
+        details = {'user':user, 'teaching_load':teaching_load, 'research_supervision':research_supervision, 'courses':courses, 'research_load':research_load, 'research_project':research_project, 'admin_load':admin_load, 'community_load': community_load }
 
     return render(request, 'profile.html', details)
 
