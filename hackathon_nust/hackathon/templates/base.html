@@ -32,37 +32,37 @@
       <div class="sidebar-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" href="#">
+            <a class="nav-link active" href="dashboard">
               <span data-feather="home"></span>
               Dashboard <span class="sr-only">(current)</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="Student-dashboard.html">
+            <a class="nav-link" href="{% url 'profile' %}">
               <span data-feather="user"></span>
               Profile
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'teaching_load' %}">
               <span data-feather="file-text"></span>
               Teaching Load
             </a>
           </li>
 		   <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'admin_load' %}">
               <span data-feather="file-text"></span>
               Administrative Load
             </a>
           </li>
 		  <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'research_load' %}">
               <span data-feather="file-text"></span>
               Research Load
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="{% url 'community_load' %}">
               <span data-feather="user-check"></span>
               Community Load
             </a>
@@ -77,8 +77,13 @@
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
       </div>
+      {% for message in messages %}
+        <h5 style="color: red;">{{ message }}</h5>
+      {% endfor %}
      
-      
+      Use the left hand panel to navigate <br>
+      {% block content %}
+      {% endblock %}
 	   <div class="row">
 <div class="col-md-6" >
              <div class="card">

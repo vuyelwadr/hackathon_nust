@@ -7,9 +7,15 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Teaching_load, Research_supervision, Courses, Research_load, Research_project, Admin_load, Community_load, User
 
+
 honours_research_weighting = 2
 postgraduate_research_weighting = 1
-course_weighting = 5
+course_weighting = 4
+course_coordinating_weighing = 1
+course_experience_fto_weighing = 2
+course_experience_fti_weighing = 1
+course_session_t_weighting = 1
+course_session_p_weighting = 2
 
 def index(request):
     if request.user.is_authenticated:
@@ -34,52 +40,105 @@ def logout(request):
 
 def teaching_load(request):
     if request.user.is_authenticated:
-        userid = request.user.id
-        teaching_load = Teaching_load.objects.prefetch_related().get(id=userid)
-        research_load = Research_load.objects.prefetch_related().get(id=userid)
-        user = User.objects.prefetch_related().get(id=userid)
-        if request.method == 'POST':
-            if 'courses' in request.POST:
-                course_name = request.POST['course_name']
-                coordinating = request.POST['coordinating']
-                experience = request.POST['experience']
-                sessions = request.POST['sessions']
-                groups = request.POST['groups']
+        try:
+            userid = request.user.id
+            teaching_load = Teaching_load.objects.prefetch_related().get(id=userid)
+            research_load = Research_load.objects.prefetch_related().get(id=userid)
+            user = User.objects.prefetch_related().get(id=userid)
+            if request.method == 'POST':
+                if 'courses' in request.POST:
+                    course_name = request.POST['course_name']
+                    coordinating = request.POST['coordinating']
+                    experience = request.POST['experience']
+                    sessions = request.POST['sessions']
+                    groups = request.POST['groups']
 
-                course_load = teaching_load.courses  + course_weighting
-                course = Courses.objects.create(user_id=userid, course_name=course_name, coordinating=coordinating, experience=experience, sessions=sessions, groups=groups)
+                    # add values form courses table to Courses table 
+                    course = Courses.objects.create(user_id=userid, course_name=course_name, coordinating=coordinating, experience=experience, sessions=sessions, groups=groups)
 
-                
+                    # set course loads
+                    course_load = course_weighting
 
-                Teaching_load.objects.filter(id=userid).update(courses = total_teaching_load)
-                
-            elif 'research_supervision' in request.POST:
-                student_name = request.POST['student_name']
-                research_type = request.POST['research_type']
+                    if coordinating:
+                        course_load += course_coordinating_weighing
 
-                Research_supervision.objects.create(user_id=userid, student_name=student_name,  research_type=research_type)
-                
-                if research_type=="honours":
-                    researchload = teaching_load.honours_research_supervision + honours_research_weighting
-                    total_teaching_load = user.teaching + honours_research_weighting
-                    Teaching_load.objects.filter(id=userid).update(honours_research_supervision = researchload)
+                    if experience=="1st_time_teaching_course_overall":
+                        course_load += course_experience_fto_weighing
+                    elif experience=="1st_time_teaching_course_at_institution":
+                        course_load += course_experience_fti_weighing
+
+                    if sessions=="theory":
+                        course_load += course_session_t_weighting
+                    elif sessions=="practical":
+                        course_load += course_session_p_weighting
+
+                    if int(groups)>0:
+                        course_load += int(groups)
+
+                    # Add calculated course load to current course load and overall teaching load
+                    total_course_load = course_load + teaching_load.courses
+                    total_teaching_load = user.teaching + course_load
+                    
+                    Teaching_load.objects.filter(id=userid).update(courses = total_course_load)
                     User.objects.filter(id=userid).update(teaching = total_teaching_load)
 
+                    update_load(request)
+                    
+                elif 'research_supervision' in request.POST:
+                    student_name = request.POST['student_name']
+                    research_type = request.POST['research_type']
 
-                elif research_type=="postgraduate":
-                    researchload = research_load.postgraduate_research_supervision + postgraduate_research_weighting
-                    total_research_load = user.research + postgraduate_research_weighting
-                    Research_load.objects.filter(id=userid).update(postgraduate_research_supervision=researchload)
-                    User.objects.filter(id=userid).update(research = total_research_load)
+                    Research_supervision.objects.create(user_id=userid, student_name=student_name,  research_type=research_type)
+                    
+                    if research_type=="honours":
+                        researchload = teaching_load.honours_research_supervision + honours_research_weighting
+                        total_teaching_load = user.teaching + honours_research_weighting
+                        Teaching_load.objects.filter(id=userid).update(honours_research_supervision = researchload)
+                        User.objects.filter(id=userid).update(teaching = total_teaching_load)
 
-                update_load(request)
 
-                messages.info(request, researchload)
-                
+                    elif research_type=="postgraduate":
+                        researchload = research_load.postgraduate_research_supervision + postgraduate_research_weighting
+                        total_research_load = user.research + postgraduate_research_weighting
+                        Research_load.objects.filter(id=userid).update(postgraduate_research_supervision=researchload)
+                        User.objects.filter(id=userid).update(research = total_research_load)
+
+                    update_load(request)
+
+        except:
+            messages.error(request,"Request Failed")
+                    
         return render(request, 'teaching_load.html')
     else:
         return render(request, 'login.html')
 
+
+def research_load(request):
+    return render(request, 'research_load.html')
+
+def admin_load(request):
+    return render(request, 'admin_load.html')
+
+def community_load(request):
+    return render(request, 'community_load.html')
+
+
+def profile(request):
+    if request.user.is_authenticated:
+        userid = request.user.id
+        update_load(request)
+        user = User.objects.prefetch_related().get(id=userid)
+        teaching_load = Teaching_load.objects.prefetch_related().get(id=userid)
+        research_supervision = Research_supervision.objects.prefetch_related().get(id=userid)
+        courses = Courses.objects.prefetch_related().get(id=userid)
+        research_load = Research_load.objects.prefetch_related().get(id=userid)
+        # research_project = Research_project.objects.prefetch_related().get(id=userid)
+        # admin_load = Admin_load.objects.prefetch_related().get(id=userid)
+        # Community_load = Community_load.objects.prefetch_related().get(id=userid)
+
+        details = {'user':user, 'teaching_load':teaching_load, 'research_supervision':research_supervision, 'courses':courses, 'research_load':research_load }
+
+    return render(request, 'profile.html', details)
 
 def initialize(request):
     userid = request.user.id
@@ -92,7 +151,6 @@ def initialize(request):
         research = Research_load(id=userid, user_id=userid, research_projects=0, postgraduate_research_supervision=0)
         teaching.save()
         research.save()
-        messages.info(request, "teach")
 
 def update_load(request):
     userid = request.user.id
