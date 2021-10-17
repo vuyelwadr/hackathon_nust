@@ -2,5 +2,17 @@
 {% load static %}
 
 {% block content %}
-
+<h5 class="card-title bg-primary"> Community engagement Form </h5>
+<form name="supervision" action="" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="row">
+    <div class="col-md-6 mb-3">
+    <label for="text"> description of engagement </label>
+    <input type="text" name="activity" class="form-control" placeholder="description" required>
+ </div>
+</div><form action="">
+    <label for="file">proof of engagement </label>
+    <input  class="btn btn-outline-primary" name="proof_community" type="file" id="myFile" name="filename">
+    <input class="btn btn-primary" name="engagement" type="submit" >
+  </form>
 {% endblock %}

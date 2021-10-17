@@ -16,6 +16,9 @@ course_experience_fto_weighing = 2
 course_experience_fti_weighing = 1
 course_session_t_weighting = 1
 course_session_p_weighting = 2
+research_project_weighting = 4
+community_activity_weighing = 2
+administrative_weighing = 1
 
 def index(request):
     if request.user.is_authenticated:
@@ -28,7 +31,6 @@ def dashboard(request):
     if request.user.is_authenticated:
         initialize(request)
         update_load(request)
-        messages.info(request, "teach")
         return render(request, 'dashboard.html')
     else:
         return render(request, 'login.html')
@@ -104,6 +106,7 @@ def teaching_load(request):
                         User.objects.filter(id=userid).update(research = total_research_load)
 
                     update_load(request)
+                    messages.success(request,"Request Completed")
 
         except:
             messages.error(request,"Request Failed")
@@ -114,13 +117,77 @@ def teaching_load(request):
 
 
 def research_load(request):
-    return render(request, 'research_load.html')
+    if request.user.is_authenticated:
+        try:
+            userid = request.user.id
+            research_load = Research_load.objects.prefetch_related().get(id=userid)
+            user = User.objects.prefetch_related().get(id=userid)
+            if request.method == 'POST':
+                    if 'project' in request.POST:
+                        project_name = request.POST['project_name']
+                        proof_research = request.FILES['proof_research']
 
+                        researchload = research_load.research_projects + research_project_weighting
+                        total_research_load = user.research + research_project_weighting
+                        Research_project.objects.create(user_id=userid, project_name=project_name,  proof_research=proof_research)
+                        Research_load.objects.filter(id=userid).update(research_projects = researchload)
+                        User.objects.filter(id=userid).update(research = total_research_load)
+
+                    elif 'research_supervision' in request.POST:
+                        student_name = request.POST['student_name']
+                        research_type = request.POST['research_type']
+
+                        Research_supervision.objects.create(user_id=userid, student_name=student_name,  research_type=research_type)
+                        
+                        if research_type=="honours":
+                            researchload = teaching_load.honours_research_supervision + honours_research_weighting
+                            total_teaching_load = user.teaching + honours_research_weighting
+                            Teaching_load.objects.filter(id=userid).update(honours_research_supervision = researchload)
+                            User.objects.filter(id=userid).update(teaching = total_teaching_load)
+
+                        elif research_type=="postgraduate":
+                            researchload = research_load.postgraduate_research_supervision + postgraduate_research_weighting
+                            total_research_load = user.research + postgraduate_research_weighting
+                            Research_load.objects.filter(id=userid).update(postgraduate_research_supervision=researchload)
+                            User.objects.filter(id=userid).update(research = total_research_load)
+                    
+                    update_load(request)
+                    messages.success(request,"Request Completed")
+
+
+            return render(request, 'research_load.html')
+        except:
+            messages.error(request,"Request Failed")
+    else:
+        return render(request, 'login.html')
+
+#maybe just for viewing
 def admin_load(request):
     return render(request, 'admin_load.html')
 
 def community_load(request):
-    return render(request, 'community_load.html')
+    if request.user.is_authenticated:
+
+        userid = request.user.id
+        research_load = Research_load.objects.prefetch_related().get(id=userid)
+        user = User.objects.prefetch_related().get(id=userid)
+        if request.method == 'POST':
+            activity = request.POST['activity']
+            proof_community = request.FILES['proof_community']
+
+            total_community_load = user.community + community_activity_weighing
+            Community_load.objects.create(user_id=userid, activity=activity,  proof_community=proof_community)
+            User.objects.filter(id=userid).update(community = total_community_load)
+
+            update_load(request)
+            messages.success(request,"Request Completed")
+
+
+
+        return render(request, 'community_load.html')
+    else:
+        return render(request, 'login.html')
+
 
 
 def profile(request):

@@ -1,5 +1,8 @@
 from django.contrib import admin
-from .models import User, Community_load, Research_load, Teaching_load
+from .models import User, Community_load, Research_load, Teaching_load, Admin_load
+from django.contrib import messages
+
+administrative_weighing = 1
 
 class Users(admin.ModelAdmin):
     list_display = ('id','first_name','last_name','email','teaching', 'administrative', 'research', 'community', 'load', 'total_load')
@@ -47,11 +50,51 @@ class Community(admin.ModelAdmin):
 admin.site.register(Community_load, Community)
 
 
-# class Overall_Load(admin.ModelAdmin):
-#     list_display = ('user_id','load', 'total_load')
-#     list_filter = ('user_id',)
-#     search_fields = ('user_id',)
+class Administrative_load(admin.ModelAdmin):
+    list_display = ('user_id','duties')
+    list_filter = ('duties',)
+    search_fields = ('user_id',)
 
-#     class Meta:
-#         model = Overall_load
-# admin.site.register(Overall_load, Overall_Load)
+    class Meta:
+        model = Community_load
+    
+
+    def save_model(self, request, obj, form, change):
+        if 'duties' in form.changed_data:
+            user_id = request.POST['user']
+
+            detail = User.objects.prefetch_related().get(id=user_id)
+            total_administrative_load = detail.administrative + administrative_weighing
+            User.objects.filter(id=user_id).update(administrative = total_administrative_load)
+            update_load(request, user_id)
+            messages.add_message(request, messages.INFO, 'Car has been sold')
+        super(Administrative_load, self).save_model(request, obj, form, change)
+
+admin.site.register(Admin_load, Administrative_load)
+
+
+
+
+
+
+
+
+
+
+
+
+
+def update_load(request, userid):
+    userid = userid
+    user = User.objects.prefetch_related().get(id=userid)
+    total_load = user.teaching + user.administrative + user.research + user.community
+    User.objects.filter(id=userid).update(total_load=total_load)
+
+    if total_load>=20:
+        User.objects.filter(id=userid).update(load="h")
+    elif total_load>10 and total_load<20:
+        User.objects.filter(id=userid).update(load="m")
+    else:
+        User.objects.filter(id=userid).update(load="l")
+ 
+

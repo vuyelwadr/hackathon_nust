@@ -1,6 +1,41 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block content %}
+{% block content1 %}
+<h5 class="card-title bg-primary"> Research Supervision </h5>
+<form name="supervision" action="" method="post" >
+    {% csrf_token %}
+<div class="row">
+    <div class="col-md-6 mb-3">
+    <label for="text">Student Name</label>
+    <input type="text" name="student_name" class="form-control" placeholder=" Student name" required>
+ </div>
+ <div class="col-md-6 mb-3">
+    <label for="text">Research Type </label>
+    <select class="form-control" name="research_type">
+       <option value="honours">honours</option>
+       <option value="postgraduate">postgraduate</option>
+       </select>
+    </div>
+    <div class="button">
+        <input type="submit" name="research_supervision">
+    </div>
+</div>
+</form> 
+{% endblock %}
 
+
+{% block content2 %}
+<h5 class="card-title bg-primary"> Research Project Form </h5>
+<form name="supervision" action="" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+<div class="row">
+    <div class="col-md-6 mb-3">
+    <label for="text"> Name</label>
+    <input type="text" name="project_name" class="form-control" placeholder="name" required>
+ </div>
+</div><form action="">
+    <input  class="btn btn-outline-primary" name="proof_research" type="file" id="myFile" name="filename">
+    <input class="btn btn-primary" name="project" type="submit" >
+  </form>
 {% endblock %}
