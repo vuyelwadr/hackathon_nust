@@ -4,10 +4,80 @@
 
 {% block content %}
 
-    <tr>
-        <td>{{ user.id }}</td>
-        <td>{{ user.username }}</td>
-    </tr>
+  <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label> Staff ID </label>
+                        <label type="text" class="form-control"> {{ user.id }}</label> 
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Firstname</label>
+                        <label type="text" class="form-control"> {{ user.first}}</label> 
+                    </div>
+                </div>
+                <div class="col-md-6  col-sm-4 col-s-12">
+                    <div class="form-group">
+                        <label>User Name</label>
+                        <label type="text" class="form-control"> {{ user.username}}</label> 
+                    </div>
+                </div>
+                                        <div class="col-md-6 col-s-12">
+                                            <div class="form-group">
+                                                <label>Surname</label>
+                                                <label type="text" class="form-control"> {{ user.last}}</label> 
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-s-12">
+                                            <div class="form-group">
+                                                <label >Email address</label>
+                                                <label type="text" class="form-control">{{ user.email}}</label> 
+                                            </div>
+                                        </div> 
+                                        <div class="col-md-6 col-s-12">
+                                            <div class="form-group">
+                                                <label >Load</label>
+                                                <label type="text" class="form-control">{{ user.load}}</label> 
+                                            </div>
+                                        </div>                                   
+                                    </div>
+                                    <div class="row">
+                                        
+                                        <div class="col-md-6 col-s-12">
+                                            <div class="form-group">
+                                                <label> Teaching Load </label>
+                                                <label type="text" class="form-control"> {{ user.teaching }}</label> 
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-s-12">
+                                            <div class="form-group">
+                                                <label >Research Load</label>
+                                                <label type="text" class="form-control"> {{ user.research }}</label> 
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-s-12">
+                                            <div class="form-group">
+                                                <label>Community Load</label>
+                                                <label type="text" class="form-control"> {{ user.community }}</label> 
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-s-12">
+                                            <div class="form-group">
+                                                <label >administrative Load</label>
+                                                <label type="text" class="form-control"> {{ user.administrative }}</label> 
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-s-12">
+                                            <div class="form-group">
+                                                <label >Total Load</label>
+                                                <label type="text" class="form-control"> {{ user.total}}</label> 
+                                            </div>
+                                        </div>
+                                     </div>
+                                        
+                                    </div>
+ 
 
 
 
