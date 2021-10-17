@@ -199,11 +199,11 @@ def profile(request):
         research_supervision = Research_supervision.objects.prefetch_related().get(id=userid)
         courses = Courses.objects.prefetch_related().get(id=userid)
         research_load = Research_load.objects.prefetch_related().get(id=userid)
-        # research_project = Research_project.objects.prefetch_related().get(id=userid)
-        # admin_load = Admin_load.objects.prefetch_related().get(id=userid)
-        # Community_load = Community_load.objects.prefetch_related().get(id=userid)
+        research_project = Research_project.objects.prefetch_related().get(id=userid)
+        admin_load = Admin_load.objects.prefetch_related().get(id=userid)
+        community_load = Community_load.objects.prefetch_related().get(id=userid)
 
-        details = {'user':user, 'teaching_load':teaching_load, 'research_supervision':research_supervision, 'courses':courses, 'research_load':research_load }
+        details = {'user':user, 'teaching_load':teaching_load, 'research_supervision':research_supervision, 'courses':courses, 'research_load':research_load, 'research_project':research_project, 'admin_load':admin_load, 'community_load': community_load }
 
     return render(request, 'profile.html', details)
 

@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import User, Community_load, Research_load, Teaching_load, Admin_load
+from .models import User, Community_load, Research_load, Teaching_load, Admin_load, Courses
 from django.contrib import messages
+from django.apps import apps
 
 administrative_weighing = 1
 
@@ -73,8 +74,14 @@ class Administrative_load(admin.ModelAdmin):
 admin.site.register(Admin_load, Administrative_load)
 
 
+class Course(admin.ModelAdmin):
+    list_display = ('user_id','course_name','coordinating', 'experience', 'sessions', 'groups')
+    list_filter = ('user_id','coordinating')
+    search_fields = ('user_id',)
 
-
+    class Meta:
+        model = Courses
+admin.site.register(Courses, Course)
 
 
 
@@ -97,4 +104,3 @@ def update_load(request, userid):
     else:
         User.objects.filter(id=userid).update(load="l")
  
-
