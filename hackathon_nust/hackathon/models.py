@@ -48,8 +48,11 @@ class Research_load(models.Model):
 
 class Research_project(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
+    status_type = [('Pending','Pending'), ('Approved', 'Approved'), ('Rejected', 'Rejected')]
     project_name = models.CharField(max_length=50)
     proof_research = models.FileField(upload_to='proof/research/')
+    status = models.CharField(max_length=10, choices=status_type, default="Pending")
+    
     
 
 class Admin_load(models.Model):
@@ -59,6 +62,7 @@ class Admin_load(models.Model):
 
 class Community_load(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, default=None, null=True)
-
+    status_type = [('Pending','Pending'), ('Approved', 'Approved'), ('Rejected', 'Rejected')]
     activity = models.CharField(max_length=50)
     proof_community = models.FileField(upload_to='proof/community_outreach/')
+    status = models.CharField(max_length=10, choices=status_type, default="Pending")

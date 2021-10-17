@@ -1,12 +1,12 @@
 from django.contrib import admin
-from .models import User, Community_load, Research_load, Teaching_load, Admin_load, Courses
+from .models import User, Community_load, Research_load, Teaching_load, Admin_load, Courses, Research_project, Research_supervision
 from django.contrib import messages
 from django.apps import apps
 
 administrative_weighing = 1
 
 class Users(admin.ModelAdmin):
-    list_display = ('id','first_name','last_name','email','teaching', 'administrative', 'research', 'community', 'load', 'total_load')
+    list_display = ('id','first_name','last_name','teaching', 'administrative', 'research', 'community', 'load', 'total_load')
     list_filter = ('load','total_load')
     search_fields = ('id',)
 
@@ -42,12 +42,27 @@ class Research(admin.ModelAdmin):
 admin.site.register(Research_load, Research)
 
 class Community(admin.ModelAdmin):
-    list_display = ('user_id','activity', 'proof_community')
-    list_filter = ('user_id',)
+    change_form_template = "admin_pannel_addons.html"
+    list_display = ('user_id','activity', 'proof_community', 'status')
+    list_filter = ('user_id', 'status')
     search_fields = ('user_id',)
 
     class Meta:
         model = Community_load
+
+    def response_change(self, request, obj):
+        object_id = request.resolver_match.kwargs['object_id']
+        
+        if "Approve" in request.POST:
+            userid = request.POST['user']
+            Community_load.objects.filter(id=userid).update(status="Approved")
+            return super(Requests, self).response_change(request, obj)
+        elif "Deny" in request.POST:
+            user_id = request.POST['user']
+            Community_load.objects.filter(id=userid).update(status="Rejected")
+            return super(Requests, self).response_change(request, obj)
+        else:
+            return super(Requests, self).response_change(request, obj)
 admin.site.register(Community_load, Community)
 
 
@@ -68,7 +83,6 @@ class Administrative_load(admin.ModelAdmin):
             total_administrative_load = detail.administrative + administrative_weighing
             User.objects.filter(id=user_id).update(administrative = total_administrative_load)
             update_load(request, user_id)
-            messages.add_message(request, messages.INFO, 'Car has been sold')
         super(Administrative_load, self).save_model(request, obj, form, change)
 
 admin.site.register(Admin_load, Administrative_load)
@@ -82,6 +96,29 @@ class Course(admin.ModelAdmin):
     class Meta:
         model = Courses
 admin.site.register(Courses, Course)
+
+
+class Research_proj(admin.ModelAdmin):
+    change_form_template = "admin_pannel_addons.html"
+    list_display = ('id', 'project_name', 'proof_research', 'status' )
+    list_filter = ('user_id', 'status')
+    search_fields = ('user_id',)
+
+    class Meta:
+        model = Research_project
+        
+admin.site.register(Research_project, Research_proj)
+
+
+class Research_sup(admin.ModelAdmin):
+    change_form_template = "user_requests.html"
+    list_display = ('user_id','student_name','research_type')
+    list_filter = ('user_id',)
+    search_fields = ('user_id',)
+    
+    class Meta:
+        model = Research_supervision
+admin.site.register(Research_supervision, Research_sup)
 
 
 
